@@ -9,7 +9,9 @@
     "build": "npm run clean && webpack --progress --profile --bail --config webpack.release.js",
     "lint": "tslint --force \"src/**/*.ts\"",
     "test": "karma start && remap-istanbul -i coverage/json/coverage-final.json -o coverage/html -t html",
-    "docs": "typedoc --options typedoc.json src/app/app.component.ts"
+    "docs": "typedoc --options typedoc.json src/app/app.component.ts",
+    "e2e": "ng e2e",
+    "postinstall": "ng build --aot"
   },
   "dependencies": {
     "@angular/animations": "^6.1.7",
