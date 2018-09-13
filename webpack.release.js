@@ -19,9 +19,7 @@ const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plug
 module.exports = webpackMerge(commonConfig, {
 
   devtool: 'source-map',
-
   mode: 'production',
-
   entry: {
     'polyfills': './src/polyfills.ts',
     'ie-polyfills': './src/ie-polyfills.ts',
@@ -36,10 +34,8 @@ module.exports = webpackMerge(commonConfig, {
     },
     chunkFilename: 'js/[name].bundle.[hash].js'
   },
-
   module: {
     rules: [
-
       {
         'test': /\.(eot|svg|cur)$/,
         'loader': 'file-loader',
@@ -139,7 +135,7 @@ module.exports = webpackMerge(commonConfig, {
 
     new AngularCompilerPlugin({
       'mainPath': './src/main.ts',
-      'tsConfigPath': './tsconfig.app.json'
+      'tsConfigPath': './src/tsconfig.app.json'
     }),
 
     // Inject script and link tags into html files
