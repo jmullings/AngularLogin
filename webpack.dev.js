@@ -72,12 +72,12 @@ module.exports = webpackMerge(commonConfig, {
     minimize: false
   },
 
-  plugins: [
-      
+   plugins: [
+
     new AngularCompilerPlugin({
-      mainPath: './src/main.ts',
-      tsConfigPath: './src/tsconfig.app.json',
-      skipCodeGeneration: false
+      mainPath: 'main.ts',
+      tsConfigPath: 'src/tsconfig.app.json',
+      skipCodeGeneration: true
     }),
       
     // Inject script and link tags into html files
