@@ -14,12 +14,13 @@
     "postinstall": "ng build --aot"
   },
   "dependencies": {
+    "@angular-devkit/build-angular": "^0.8.1",
+    "@angular-devkit/build-optimizer": "0.7.3",
     "@angular/animations": "^6.1.7",
     "@angular/cdk": "^6.4.7",
     "@angular/cli": "^6.2.1",
     "@angular/common": "6.1.2",
     "@angular/core": "6.1.2",
-    "@angular-devkit/build-optimizer": "0.7.3",
     "@angular/forms": "6.1.2",
     "@angular/http": "^6.1.7",
     "@angular/material": "^6.4.7",
