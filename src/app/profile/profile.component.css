@@ -1,0 +1,25 @@
+.container {
+    padding-left: 0;
+    padding-right: 0;
+}
+.tabs {
+    margin: 10px;
+    background-color: #ffffff;
+}
+
+mat-card {
+    width: auto;
+    margin: 0% 0% 0% 0%;
+    height: auto;
+}
+
+mat-card > button {
+    margin: 0% 0% 1% 91.7%;
+    background-color: #4680ff;
+    color: #ffffff;
+}
+@media screen and (max-width: 900px) {
+    mat-card button {
+        margin-left: 0%;
+    }
+}

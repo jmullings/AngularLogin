@@ -1,0 +1,8 @@
+@import 'app1.css';
+@import "~@angular/material/prebuilt-themes/purple-green.css";
+body {
+    background: #6683a4;
+}
+a {
+    color: #ff9db3;
+}
