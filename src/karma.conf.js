@@ -1,78 +1,80 @@
 module.exports = function (config) {
-  const _config = {
+    var configuration = {
+        basePath: '',
+        frameworks: ['jasmine'],
+        plugins: [
+            require('karma-jasmine'),
+            require('karma-chrome-launcher'),
+            require('karma-mocha-reporter')
+        ],
+        customLaunchers: {
+            Chrome_travis: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
+        },
+        files: [
+            { pattern: 'node_modules/core-js/client/shim.min.js', included: true, watched: true },
 
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+            { pattern: 'node_modules/traceur/bin/traceur.js', included: true, watched: true },
 
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+            { pattern: 'node_modules/reflect-metadata/Reflect.js', included: true, watched: true },
 
-    // list of files / patterns to load in the browser
-    files: [
-      { pattern: './karma-shim.js', watched: false }
-    ],
+            { pattern: 'node_modules/systemjs/dist/system-polyfills.js', included: true, watched: true },
+            { pattern: 'node_modules/systemjs/dist/system.src.js', included: true, watched: true },
 
-    // list of files to exclude
-    exclude: [],
+            { pattern: 'node_modules/zone.js/dist/zone.js', included: true, watched: true },
+            { pattern: 'node_modules/zone.js/dist/long-stack-trace-zone.js', included: true, watched: true },
+            { pattern: 'node_modules/zone.js/dist/async-test.js', included: true, watched: true },
+            { pattern: 'node_modules/zone.js/dist/fake-async-test.js', included: true, watched: true },
+            { pattern: 'node_modules/zone.js/dist/sync-test.js', included: true, watched: true },
+            { pattern: 'node_modules/zone.js/dist/proxy.js', included: true, watched: true },
+            { pattern: 'node_modules/zone.js/dist/jasmine-patch.js', included: true, watched: true },
 
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      './karma-shim.js': ['webpack', 'sourcemap']
-    },
+            { pattern: 'node_modules/rxjs/**/*.js', included: false, watched: false },
+            { pattern: 'node_modules/rxjs/**/*.js.map', included: false, watched: false },
+            { pattern: 'node_modules/@angular/**/*.js.map', included: false, watched: false },
 
-    webpack: require('./webpack.test.js'),
+            { pattern: 'node_modules/@angular/**/*.js', included: false, watched: true },
 
-    webpackMiddleware: {
-      // webpack-dev-middleware configuration
-      // i. e.
-      stats: 'errors-only'
-    },
+            // paths loaded via module imports
+            { pattern: 'dist/**/*.js', included: false, watched: true },
+            { pattern: 'test-built/**/*.js', included: false, watched: true },
 
-    webpackServer: {
-      noInfo: true // please don't spam the console when running in karma!
-    },
+            // paths loaded via Angular's component compiler
+            // (these paths need to be rewritten, see proxies section)
+            { pattern: 'dist/**/*.html', included: false, watched: true },
+            { pattern: 'dist/**/*.css', included: false, watched: true },
 
-    // test results reporter to use
-    // possible values: 'dots', 'progress', 'mocha'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ["progress"],
+            // paths to support debugging with source maps in dev tools
+            { pattern: 'dist/**/*.ts', included: false, watched: false },
+            { pattern: 'dist/**/*.js.map', included: false, watched: false },
 
-    // web server port
-    port: 9876,
+            { pattern: 'karma-test-shim.js', included: true, watched: true },
+        ],
 
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
-
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
-
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
-
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
-
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true
-  };
-
-    _config.reporters.push("coverage");
-
-    _config.coverageReporter = {
-      dir: 'coverage/',
-      reporters: [{
-        type: 'json',
-        dir: 'coverage',
-        subdir: 'json',
-        file: 'coverage-final.json'
-      }]
+        // proxied base paths
+        proxies: {
+            // required for component assets fetched by Angular's compiler
+            '/dist/': '/base/dist/',
+            '/base/src/': '/base/dist/',
+            '/base/test-built/src': '/base/dist'
+        },
+        exclude: [
+            'node_modules/**/*spec.js'
+        ],
+        reporters: ['mocha'],
+        port: 9876,
+        colors: true,
+        logLevel: config.LOG_INFO,
+        autoWatch: true,
+        browsers: ['Chrome'],
+        singleRun: false
     };
-
-  config.set(_config);
-
+    if (process.env.TRAVIS) {
+        configuration.browsers = ['Chrome_travis'];
+        configuration.singleRun = true;
+        configuration.browserNoActivityTimeout = 90000;
+    }
+    config.set(configuration);
 };

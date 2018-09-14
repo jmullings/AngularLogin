@@ -1,0 +1,13 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "no-console": false,
+        "ordered-imports": false,
+        "only-arrow-functions": false,
+        "quotemark": [true, "single"],
+        "max-line-length": [true, 140],
+        "object-literal-sort-keys": false,
+        "interface-name": [true, "never-prefix"],
+        "comment-format": [true, "check-space", "check-uppercase"]
+    }
+}

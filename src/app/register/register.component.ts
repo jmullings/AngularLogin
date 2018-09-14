@@ -1,34 +1,65 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Register } from '../register';
+import {AccountService} from '../core/services/account.service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {Register} from '../register';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-    register: Register = {
+    register:Register = {
         firstname: '',
         lastname: '',
         email: '',
         password: '',
-        password1: ''
+        passwords: ''
     };
 
-    constructor(private router : Router) { }
+    constructor(private accountService:AccountService, private router:Router) {
+    
+    }
 
     ngOnInit() {
     }
 
-    getSession() : void {
-        if (this.register.password === this.register.password1 ){
-            alert("Invalid: Passwords do not match");
-        }else if (this.register.password == 'admin' && this.register.password == 'admin') {
-            this.router.navigate(["profile"]);
+    registerAccount(acc) {
+        this.accountService.create(acc).finally(() => {
+
+        }).subscribe(
+            (response) => {
+                /* Redirect to profile page on successful response */
+                if (response) {
+                    this.accountService.setCookies(JSON.stringify(response))
+                    this.router.navigate(['profile']);
+                }
+                else
+                    alert('Incorrect email or password!');
+            },
+            (error) => {
+                /* Display error message */
+                alert('Oh Snap ' + error.message);
+            }
+        );
+    }
+
+    getSession():void {
+        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+        if (!regex.test(this.register.email)) {
+            alert("Invalid email address");
+        } else if (this.register.password === this.register.passwords) {
+            alert("Invalid: Passwords do not match" +this.register.password +" "+ this.register.passwords);
+        } else if (this.register.firstname !== '' && this.register.lastname !== '') {
+            let account = [
+                this.register.firstname,
+                this.register.lastname,
+                this.register.email,
+                this.register.password];
+            this.registerAccount(account)
         } else {
             alert("Invalid credentials");
         }
     }
-    
+
 }

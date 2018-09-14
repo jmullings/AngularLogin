@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
-
+import {CookieService} from 'angular2-cookie/core';
 import {Observable} from 'rxjs/Rx';
 
 /**
@@ -21,8 +21,20 @@ export class AccountService {
      * @param {Http} http - The injected Http.
      * @constructor
      */
-    constructor(private http: Http) {}
+    constructor(private http: Http, private cookieService:CookieService) {}
 
+    public getCookies(){
+
+        return this.cookieService.get('cookieName');
+    }
+
+    public setCookies(cookiesmData: string){
+        // return this.cookieService.put('cookieName', cookiesmData, 10 /*days from now*/);
+    }
+
+    public delCookies() {
+        this.cookieService.remove('cookieName');
+    }
     /**
      * Obtain Account details.
      * @return {Observable<object>} - The result of the API call as an Observable containing the response and error.
@@ -45,10 +57,12 @@ export class AccountService {
                         .catch(this.handleError);
     }
 
-
-    public quote(formData: string[]): Observable<object> {
-
-        const payload = JSON.stringify(formData);
+    /**
+     * simple API call to obtain joke quotes
+     * @param formData
+     * @returns {any|Maybe<T>}
+     */
+    public quote(): Observable<object> {
         return this.http.get(`https://geek-jokes.sameerkumar.website/api`, this.options)
                         .map(this.extractData)
                         .catch(this.handleError);
