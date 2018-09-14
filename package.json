@@ -8,7 +8,7 @@
     "test": "karma start && remap-istanbul -i coverage/json/coverage-final.json -o coverage/html -t html",
     "lint": "tslint --force \"src/**/*.ts\"",
     "ng": "ng",
-    "start": "node server.js",
+    "start": "node server/server.js",
     "e2e": "ng e2e",
     "postinstall": "ng build --aot --prod"
   },
