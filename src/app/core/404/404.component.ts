@@ -9,6 +9,6 @@ export class NotFoundComponent implements OnInit {
     public constructor(private title: Title) {}
 
     public ngOnInit() {
-        this.title.setTitle('404 | Demo App');
+        this.title.setTitle('404 | Where u go?');
     }
 }

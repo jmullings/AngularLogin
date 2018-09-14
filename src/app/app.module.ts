@@ -8,6 +8,7 @@ import { CustomMaterialModule } from './material.module';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppComponent } from './app.component';
 import { AccountService } from './core/services/account.service';
+import { NotFoundComponent } from './core/404/404.component';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 import { LandingComponent } from './landing/landing.component';
@@ -16,13 +17,16 @@ import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AppRoutingModule } from './/app-routing.module';
 
+
+
 @NgModule({
     declarations: [
         AppComponent,
         LoginComponent,
         LandingComponent,
         RegisterComponent,
-        ProfileComponent
+        ProfileComponent,
+        NotFoundComponent
     ],
     imports: [
         BrowserModule,

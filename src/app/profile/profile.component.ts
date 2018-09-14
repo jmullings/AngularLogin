@@ -44,7 +44,9 @@ export class ProfileComponent implements OnInit {
      */
     getCookies(){
         this.cookData = this.accountService.getCookies();
-        if(this.cookData)
+        if(!this.cookData)
+            this.router.navigate(['landing']);
+        else
         this.accountService.getUser(this.cookData).finally(() => {
         }).subscribe(
             (response) => {
