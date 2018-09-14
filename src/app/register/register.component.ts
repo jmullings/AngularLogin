@@ -24,18 +24,19 @@ export class RegisterComponent implements OnInit {
     ngOnInit() {
     }
 
+    /**
+     * registerAccount
+     * @param acc
+     */
     registerAccount(acc) {
         this.accountService.create(acc).finally(() => {
-
         }).subscribe(
             (response) => {
                 /* Redirect to profile page on successful response */
-                if (response) {
-                    this.accountService.setCookies(JSON.stringify(response))
+                if(response)  {
+                    this.accountService.setCookies(Object.values(response)[2]);
                     this.router.navigate(['profile']);
                 }
-                else
-                    alert('Incorrect email or password!');
             },
             (error) => {
                 /* Display error message */
@@ -44,19 +45,25 @@ export class RegisterComponent implements OnInit {
         );
     }
 
+    /**
+     * getSession
+     */
     getSession():void {
+        
         const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+        
         if (!regex.test(this.register.email)) {
             alert("Invalid email address");
-        } else if (this.register.password === this.register.passwords) {
-            alert("Invalid: Passwords do not match" +this.register.password +" "+ this.register.passwords);
+        } else if (this.register.password !== this.register.passwords) {
+            alert("Invalid: Passwords do not match");
         } else if (this.register.firstname !== '' && this.register.lastname !== '') {
-            let account = [
-                this.register.firstname,
-                this.register.lastname,
-                this.register.email,
-                this.register.password];
-            this.registerAccount(account)
+            var item = {
+                firstname: this.register.firstname,
+                lastname: this.register.lastname,
+                email: this.register.email,
+                password:this.register.password,
+            };
+            this.registerAccount(item);
         } else {
             alert("Invalid credentials");
         }

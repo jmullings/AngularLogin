@@ -23,16 +23,23 @@ export class LoginComponent implements OnInit {
     ngOnInit() {
     }
 
-    getLogin(pass,email) {
-        this.accountService.login([pass,email]).finally(() => {
-
+    /**
+     * getLogin
+     * @param item
+     */
+    getLogin(item) {
+        this.accountService.login(item).finally(() => {
         }).subscribe(
             (response) => {
-                /* Redirect to profile page on successfull response */
-                if(response)
-                    this.router.navigate(['profile']);
-                else
-                    alert('Incorrect email or password!');
+                if (response){
+                    const arrs = Object.values(response);
+                    if(!arrs.length)
+                        alert('Sorry wrong email or password');
+                    else{
+                        this.accountService.setCookies(Object.values(response)[4]);
+                        this.router.navigate(['profile']);
+                    }
+                }
             },
             (error) => {
                 /* Display error message */
@@ -40,13 +47,22 @@ export class LoginComponent implements OnInit {
             }
         );
     }
+
+    /**
+     * getSession
+     */
     getSession():void {
 
         const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+        
         if (!regex.test(this.login.email)) {
             alert("Invalid email address");
         } else  if (this.login.password !== '') {
-            this.getLogin(this.login.email,this.login.password)
+            const item ={
+                email:this.login.email,
+                password:this.login.password
+            }
+            this.getLogin(item)
         } else {
             alert("Invalid credentials");
         }

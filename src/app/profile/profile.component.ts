@@ -9,9 +9,12 @@ import { Register } from '../register';
 })
 export class ProfileComponent implements OnInit {
 
+    public email: string;
     public isSecure: boolean;
     public jokeText: string;
     public cookData: string;
+    public firstname: string;
+    public lastname: string;
 
     register: Register = {
         firstname: '',
@@ -27,25 +30,50 @@ export class ProfileComponent implements OnInit {
 
     }
 
+    /**
+     * Call cookie or redirect
+     */
     ngOnInit() {
         this.getCookies();
         this.getRandomQuote();
 
     }
 
+    /**
+     * getCookies
+     */
     getCookies(){
-        this.cookData = this.accountService.getCookies()
+        this.cookData = this.accountService.getCookies();
+        if(this.cookData)
+        this.accountService.getUser(this.cookData).finally(() => {
+        }).subscribe(
+            (response) => {
+                if (response){
+                    const arrs = Object.values(response);
+                    this.firstname =arrs[1];
+                    this.lastname =arrs[2];
+                    this.email =arrs[3];
+                    if(!arrs.length)
+                        this.router.navigate(['landing']);
+                }
+            },
+            (error) => {
+                alert('Oh Snap ' + error.message);
+            }
+        );
 
     }
+
+    /**
+     * getRandomQuote API Call..
+     */
     getRandomQuote() {
         this.accountService.quote().finally(() => {
         }).subscribe(
             (response) => {
-                this.jokeText = response.toString();
-                console.log(response)
-            },
+                this.jokeText = response.toString();},
             (error) => {
-                console.log(error)
+                console.log(error);
                 /* Display error message */
                 alert('Oh Snap ' + error.message);
             }

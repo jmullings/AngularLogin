@@ -8,11 +8,12 @@ import {Observable} from 'rxjs/Rx';
  */
 @Injectable()
 export class AccountService {
-    private baseUrl = '/api/v1/account';
+    // private baseUrl = 'http://localhost:3000/api/v1/account';
+    private baseUrl = 'https://angularlog.herokuapp.com/api/v1/account';
+    private RegUrl = `${this.baseUrl}/insert`;
+    private UserUrl = `${this.baseUrl}/getid`;
+    private UserPass = `${this.baseUrl}/get-user`;
     private sessionUrl = `${this.baseUrl}/session`;
-    private passordUrl = `${this.baseUrl}/password`;
-    private activationUrl = `${this.baseUrl}/activation`;
-
     private headers = new Headers({'Content-Type': 'application/json'});
     private options = new RequestOptions({headers: this.headers});
 
@@ -25,22 +26,24 @@ export class AccountService {
 
     public getCookies(){
 
-        return this.cookieService.get('cookieName');
+        return this.cookieService.get('alCookie');
     }
 
     public setCookies(cookiesmData: string){
-        // return this.cookieService.put('cookieName', cookiesmData, 10 /*days from now*/);
+       
+        return this.cookieService.put('alCookie', cookiesmData);
     }
 
     public delCookies() {
-        this.cookieService.remove('cookieName');
+        this.cookieService.remove('alCookie');
     }
     /**
      * Obtain Account details.
      * @return {Observable<object>} - The result of the API call as an Observable containing the response and error.
      */
-    public get(): Observable<object> {
-        return this.http.get(this.baseUrl, this.options)
+    public getUser(data: string): Observable<object> {
+        const payload = {encrypted:data};
+        return this.http.post(this.UserUrl, payload, this.options)
                         .map(this.extractData)
                         .catch(this.handleError);
     }
@@ -50,9 +53,9 @@ export class AccountService {
      * @param {string[]} formData - New account form data.
      * @return {Observable<object>} - The result of the API call as an Observable containing the response and error.
      */
-    public create(formData: string[]): Observable<object> {
+    public create(formData: {}): Observable<object> {
         const payload = JSON.stringify(formData);
-        return this.http.post(this.baseUrl, payload, this.options)
+        return this.http.post(this.RegUrl, payload, this.options)
                         .map(this.extractData)
                         .catch(this.handleError);
     }
@@ -72,71 +75,13 @@ export class AccountService {
      * @param {string[]} formData - Login form data.
      * @return {Observable<object>} - The result of the API call as an Observable containing the response and error.
      */
-    public login(formData: string[]): Observable<object> {
+    public login(formData: {}): Observable<object> {
         const payload = JSON.stringify(formData);
-        return this.http.post(this.sessionUrl, payload, this.options)
+        return this.http.post(this.UserPass, payload, this.options)
                         .map(this.extractData)
                         .catch(this.handleError);
     }
 
-    /**
-     * Delete an existing session for an account (logout).
-     * @return {Observable<object>} - The result of the API call as an Observable containing the response and error.
-     */
-    public logout(): Observable<object> {
-        return this.http.delete(this.sessionUrl, this.options)
-                        .map(this.extractData)
-                        .catch(this.handleError);
-    }
-
-    /**
-     * Send an account activation email.
-     * @param {string} email - Email of the account to activate.
-     * @return {Observable<object>} - The result of the API call as an Observable containing the response and error.
-     */
-    public sendActivationEmail(email: string): Observable<object> {
-        const payload = JSON.stringify({email});
-        return this.http.post(this.activationUrl, payload, this.options)
-                        .map(this.extractData)
-                        .catch(this.handleError);
-    }
-
-    /**
-     * Send a password reset email.
-     * @param {string} email - Email of the account that requested a password reset.
-     * @return {Observable<object>} - The result of the API call as an Observable containing the response and error.
-     */
-    public sendPasswordResetEmail(email: string): Observable<object> {
-        const payload = JSON.stringify({email});
-        return this.http.post(this.passordUrl, payload, this.options)
-                        .map(this.extractData)
-                        .catch(this.handleError);
-    }
-
-    /**
-     * Activate a recently created account.
-     * @param {string} token - The account activation token from the url or email link.
-     * @return {Observable<object>} - The result of the API call as an Observable containing the response and error.
-     */
-    public activate(token: string): Observable<object> {
-        const payload = JSON.stringify({token});
-        return this.http.put(this.activationUrl, payload, this.options)
-                        .map(this.extractData)
-                        .catch(this.handleError);
-    }
-
-    /**
-     * Reset account password.
-     * @param token - Account password reset token.
-     * @param {string} password - New account password.
-     * @return {Observable<object>} - The result of the API call as an Observable containing the response and error.
-     */
-    public resetPassword(token: string, password: string): Observable<object> {
-        const payload = JSON.stringify({token, password});
-        return this.http.put(this.passordUrl, payload, this.options)
-                        .map(this.extractData)
-                        .catch(this.handleError);
-    }
 
     /**
      * Obtain the current status of account's session (login session).
