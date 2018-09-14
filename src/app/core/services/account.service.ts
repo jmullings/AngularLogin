@@ -9,7 +9,7 @@ import {Observable} from 'rxjs/Rx';
 @Injectable()
 export class AccountService {
     // private baseUrl = 'http://localhost:3000/api/v1/account';
-    private baseUrl = 'https://angularlog.herokuapp.com/api/v1/account';
+    private baseUrl = '/api/v1/account';
     private RegUrl = `${this.baseUrl}/insert`;
     private UserUrl = `${this.baseUrl}/getid`;
     private UserPass = `${this.baseUrl}/get-user`;
