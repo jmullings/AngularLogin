@@ -20,7 +20,7 @@ var url = "";
 if (os.hostname().indexOf("local") > -1)
     url = "mongodb://localhost:27017/angularlog";
 else
-    url = "mongodb://jmullings.calata:Winter1972>@ds261429.mlab.com:61429/angularlog";
+    url = "mongodb://jmullings.calata:Winter1972@ds261429.mlab.com:61429/angularlog";
 
 // Use connect method to connect to the Server
 MongoClient.connect(url, function (err, db) {
