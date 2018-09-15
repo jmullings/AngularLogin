@@ -85,7 +85,7 @@ router.post('/api/v1/account/get-user', function (req, res, next) {
 
 
 });
-//Image inseert via express uploader//
+//Account insert via express uploader//
 router.post('/api/v1/account/insert', function (req, res, next) {
     ///Collect all form data
     const cipher = crypto.createCipher('aes192', req.body.password);
